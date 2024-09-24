@@ -36,6 +36,12 @@ def swap_faces(img1, img2):
     face1_resize = cv2.resize(face1, (w2,h2), interpolation=cv2.INTER_AREA)
     face2_resize = cv2.resize(face2, (w1,h1), interpolation=cv2.INTER_AREA)
 
+    # replace face regions
+    img1[y1:y1+h1, x1:x1+w1] = face2_resize
+    img2[y2:y2+h2, x2:x2+w2] = face1_resize
+
+    return img1, img2
+
 # main code
 ap = argparse.ArgumentParser()
 ap.add_argument("-i1", "--image1", required=True, # for multiple images, use specific flags
