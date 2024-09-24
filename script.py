@@ -2,18 +2,23 @@ import numpy as np
 import argparse
 import cv2
 
-# function to detect largest contour
-def detect_face_contour(img):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(gray, (11,11), 0)
-    edged = cv2.Canny(blurred, 30, 150)
+# function to detect face contour using Haar cascade (https://cs.stackexchange.com/questions/109227/how-to-detect-facial-landmarks-using-haar-and-other-way)
+# detect_face_contour() is inaccurate b/c it assumes the face is the most defined contour
+# Haar features (https://en.wikipedia.org/wiki/Haar-like_feature) are read using the cv::CascadeClassifier::load
+# sources: https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html
 
-    (cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# # function to detect largest contour
+# def detect_face_contour(img):
+#     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#     blurred = cv2.GaussianBlur(gray, (11,11), 0)
+#     edged = cv2.Canny(blurred, 30, 150)
 
-    face_contour = max(cnts, key=cv2.contourArea) # assuming largest contour is the face
-    # this may be a simplification (we will see as we input different images)
+#     (cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    return face_contour
+#     face_contour = max(cnts, key=cv2.contourArea) # assuming largest contour is the face
+#     # this may be a simplification (we will see as we input different images)
+
+#     return face_contour
 
 # function to swap face region
 def swap_faces(img1, img2):
