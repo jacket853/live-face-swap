@@ -15,6 +15,15 @@ def detect_face_contour(img):
 
     return face_contour
 
+# function to swap face region
+def swap_faces(img1, img2):
+    face_countour1 = detect_face_contour(img1)
+    face_countour2 = detect_face_contour(img2)
+
+    if face_countour1 is None or face_countour2 is None:
+        print("Couldn't detect face contour in image(s).")
+        return None
+
 # main code
 ap = argparse.ArgumentParser()
 ap.add_argument("-i1", "--image1", required=True, # for multiple images, use specific flags
