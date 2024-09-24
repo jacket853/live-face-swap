@@ -23,6 +23,18 @@ def swap_faces(img1, img2):
     if face_countour1 is None or face_countour2 is None:
         print("Couldn't detect face contour in image(s).")
         return None
+    
+    # bounding rectangles/mask around contours
+    x1, y1, w1, h1 = cv2.boundingRect(face_countour1)
+    x2, y2, w2, h2 = cv2.boundingRect(face_countour2)
+
+    # crop face region from mask
+    face1 = img1[y1:y1+h1, x1:x1+w1]
+    face2 = img2[y2:y2+h2, x2:x2+w2]
+
+    # resize to match target bounds
+    face1_resize = cv2.resize(face1, (w2,h2), interpolation=cv2.INTER_AREA)
+    face2_resize = cv2.resize(face2, (w1,h1), interpolation=cv2.INTER_AREA)
 
 # main code
 ap = argparse.ArgumentParser()
