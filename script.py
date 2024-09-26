@@ -14,6 +14,13 @@ def detect_face(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30,30))
 
+    if len(faces) == 0:
+        return None
+    
+    # first detected face is what we want to swap
+    (x, y, w, h) = faces[0]
+    return (x, y, w, h)
+
 # # function to detect largest contour
 # def detect_face_contour(img):
 #     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -29,16 +36,16 @@ def detect_face(img):
 
 # function to swap face region
 def swap_faces(img1, img2):
-    face_countour1 = detect_face_contour(img1)
-    face_countour2 = detect_face_contour(img2)
+    face_countour1 = detect_face(img1)
+    face_countour2 = detect_face(img2)
 
     if face_countour1 is None or face_countour2 is None:
         print("Couldn't detect face contour in image(s).")
         return None
     
     # bounding rectangles/mask around contours
-    x1, y1, w1, h1 = cv2.boundingRect(face_countour1)
-    x2, y2, w2, h2 = cv2.boundingRect(face_countour2)
+    x1, y1, w1, h1 = face_countour1
+    x2, y2, w2, h2 = face_countour2
 
     # crop face region from mask
     face1 = img1[y1:y1+h1, x1:x1+w1]
