@@ -7,6 +7,13 @@ import cv2
 # Haar features (https://en.wikipedia.org/wiki/Haar-like_feature) are read using the cv::CascadeClassifier::load
 # sources: https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html
 
+# load pre-trained Haar cascade for face detection
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+def detect_face(img):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30,30))
+
 # # function to detect largest contour
 # def detect_face_contour(img):
 #     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
