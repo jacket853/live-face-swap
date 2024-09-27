@@ -1,0 +1,56 @@
+import numpy as np
+import argparse
+import cv2
+
+# load pre-trained Haar cascade for face detection
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+def detect_faces(img):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30,30))
+
+    if len(faces) < 2:
+        return None
+    
+    return faces # return all detected faces as bounding rects
+
+# function to swap 2 face regions in the same image
+def swap_faces(img):
+    faces = detect_faces(img)
+
+    if face is None:
+        print("Couldn't detect face contour in image(s).")
+        return None
+    
+    faces = sorted(faces, key=lambda x:x[0])# sort faces by x-coordinate (l to r)
+
+    # extract faces
+
+    # resize to match target bounds
+    face1_resize = cv2.resize(face1, (w2,h2), interpolation=cv2.INTER_AREA)
+    face2_resize = cv2.resize(face2, (w1,h1), interpolation=cv2.INTER_AREA)
+
+    # replace face regions
+    img1[y1:y1+h1, x1:x1+w1] = face2_resize
+    img2[y2:y2+h2, x2:x2+w2] = face1_resize
+
+    return img1, img2
+
+# main code
+ap = argparse.ArgumentParser()
+ap.add_argument("-i1", "--image1", required=True, # for multiple images, use specific flags
+                help="Path to the Image")
+ap.add_argument("-i2", "--image2", required=True,
+                help="Path to the Image")
+args = vars(ap.parse_args())
+
+# load images
+image1 = cv2.imread(args["image1"])
+image2 = cv2.imread(args["image2"])
+
+# perform face swap using function and display windows
+result_image1, result_image2 = swap_faces(image1, image2)
+cv2.imshow("1", result_image1)
+cv2.imshow("2", result_image2)
+
+cv2.waitKey(0)
