@@ -18,39 +18,40 @@ def detect_faces(img):
 def swap_faces(img):
     faces = detect_faces(img)
 
-    if face is None:
+    if faces is None:
         print("Couldn't detect face contour in image(s).")
         return None
     
     faces = sorted(faces, key=lambda x:x[0])# sort faces by x-coordinate (l to r)
 
     # extract faces
+    (x1, y1, w1, h1) = faces[0]
+    (x2, y2, w2, h2) = faces[1]
+
+    # crop
+    face1_region = img[y1:y1+h1, x1:x1+w1]
+    face2_region = img[y2:y2+h2, x2:x2+w2]
 
     # resize to match target bounds
-    face1_resize = cv2.resize(face1, (w2,h2), interpolation=cv2.INTER_AREA)
-    face2_resize = cv2.resize(face2, (w1,h1), interpolation=cv2.INTER_AREA)
+    face1_resize = cv2.resize(face1_region, (w2,h2), interpolation=cv2.INTER_AREA)
+    face2_resize = cv2.resize(face2_region, (w1,h1), interpolation=cv2.INTER_AREA)
 
     # replace face regions
-    img1[y1:y1+h1, x1:x1+w1] = face2_resize
-    img2[y2:y2+h2, x2:x2+w2] = face1_resize
+    img[y1:y1+h1, x1:x1+w1] = face2_resize
+    img[y2:y2+h2, x2:x2+w2] = face1_resize
 
-    return img1, img2
+    return img
 
 # main code
 ap = argparse.ArgumentParser()
-ap.add_argument("-i1", "--image1", required=True, # for multiple images, use specific flags
-                help="Path to the Image")
-ap.add_argument("-i2", "--image2", required=True,
+ap.add_argument("-i", "--image", required=True, # for multiple images, use specific flags
                 help="Path to the Image")
 args = vars(ap.parse_args())
 
 # load images
-image1 = cv2.imread(args["image1"])
-image2 = cv2.imread(args["image2"])
+img = cv2.imread(args["image"])
 
 # perform face swap using function and display windows
-result_image1, result_image2 = swap_faces(image1, image2)
-cv2.imshow("1", result_image1)
-cv2.imshow("2", result_image2)
+result_image = swap_faces(img)
 
 cv2.waitKey(0)
