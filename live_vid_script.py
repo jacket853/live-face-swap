@@ -53,5 +53,6 @@ img = cv2.imread(args["image"])
 
 # perform face swap using function and display windows
 result_image = swap_faces(img)
+cv2.imshow("Face swap", result_image)
 
 cv2.waitKey(0)
