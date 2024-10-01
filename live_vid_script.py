@@ -2,6 +2,8 @@ import numpy as np
 import argparse
 import cv2
 
+###### JACK'S CODE ######
+
 # load pre-trained Haar cascade for face detection
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
@@ -42,14 +44,53 @@ def swap_faces(img):
 
     return img
 
-# main code
+
+###### CASPAR'S CODE ######
+def get_image(frame):
+    cv2.imshow("img",frame)
+    # return image
+
+# Start video capture from webcam, 0 argument opens default camera
+cap = cv2.VideoCapture(0)
+
+while True:
+    # Capture each frame, loops through the frames
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    # Convert the frame to HSV color space
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    
+    # display the frames in real time
+    cv2.imshow("Original", frame)
+
+    # waits for the key press
+    key = cv2.waitKey(1) &0xFF
+
+    if key == ord('p'):
+        # create a filename for each saved frame
+        filename = "saved_frame.png"
+        # save the current frame to a file with the corrsponding name
+        cv2.imwrite(filename, frame)
+
+        break
+
+    # Break the loop on 'q' key press
+    if key == ord('q'):
+        break
+
+# Release video capture and close all OpenCV windows
+cap.release()
+cv2.destroyAllWindows()
+
+# parsing
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
-                help="Path to the Image")
+ap.add_argument("saved_frame.png")
 args = vars(ap.parse_args())
 
 # load image
-img = cv2.imread(args["image"])
+img = cv2.imread(args["saved_frame.png"])
 
 # perform face swap using function and display windows
 result_image = swap_faces(img)
