@@ -53,6 +53,8 @@ def get_image(frame):
 # Start video capture from webcam, 0 argument opens default camera
 cap = cv2.VideoCapture(0)
 
+filename = ""
+
 while True:
     # Capture each frame, loops through the frames
     ret, frame = cap.read()
@@ -84,16 +86,20 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 
-# parsing
-ap = argparse.ArgumentParser()
-ap.add_argument("saved_frame.png")
-args = vars(ap.parse_args())
+###### MAIN ######
+if __name__ == "__main__":
+    # # parsing
+    # ap = argparse.ArgumentParser()
+    # ap.add_argument("saved_frame.png")
+    # args = vars(ap.parse_args())
 
-# load image
-img = cv2.imread(args["saved_frame.png"])
+    # # load image
+    # img = cv2.imread(args["saved_frame.png"])
 
-# perform face swap using function and display windows
-result_image = swap_faces(img)
-cv2.imshow("Face swap", result_image)
+    img = cv2.imread(filename)
 
-cv2.waitKey(0)
+    # perform face swap using function and display windows
+    result_image = swap_faces(img)
+    cv2.imshow("Face swap", result_image)
+
+    cv2.waitKey(0)
