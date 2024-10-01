@@ -44,11 +44,11 @@ def swap_faces(img):
 
 # main code
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True, # for multiple images, use specific flags
+ap.add_argument("-i", "--image", required=True,
                 help="Path to the Image")
 args = vars(ap.parse_args())
 
-# load images
+# load image
 img = cv2.imread(args["image"])
 
 # perform face swap using function and display windows
