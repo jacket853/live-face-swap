@@ -1,6 +1,7 @@
 import numpy as np
 import argparse
 import cv2
+import matplotlib.pyplot as plt
 
 ###### JACK'S CODE ######
 
@@ -50,6 +51,18 @@ def get_image(frame):
     cv2.imshow("img",frame)
     # return image
 
+# function to display a histogram 
+def display_histogram(frame):
+    color = ('b','g','r')
+
+    # loops through frames and colors to get individual pixel values
+    for i, col in enumerate(color):
+        histr = cv2.calcHist([frame], [i], None, [256], [0, 256])
+        plt.plot(histr, color = col)
+        plt.xlim([0, 256])
+    
+    plt.show()
+
 # Start video capture from webcam, 0 argument opens default camera
 cap = cv2.VideoCapture(0)
 
@@ -69,6 +82,10 @@ while True:
 
     # waits for the key press
     key = cv2.waitKey(1) &0xFF
+
+    # displays histogram on the press of h
+    if key == ord('h'):
+        display_histogram(frame)
 
     if key == ord('p'):
         # create a filename for each saved frame
